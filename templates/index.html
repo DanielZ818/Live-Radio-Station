@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Background Video and Audio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@500&family=ZCOOL+KuaiLe&display=swap"
+    rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background-color: #000;
+      position: relative;
+    }
+
+    #video-background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -1;
+    }
+
+    #text-box {
+      position: absolute;
+      bottom: 150px;
+      left: 200px;
+      /* Adjusted to place the text box on the bottom left corner */
+      background-color: rgba(0, 0, 0, 0.5);
+      padding: 50px;
+      border-radius: 35px;
+      color: #fff;
+      font-size: 110px;
+      font-family: 'myfont', sans-serif;
+      max-width: 1000px;
+    }
+
+    #timestamp-box {
+      position: absolute;
+      bottom: 100px;
+      right: 100px;
+      background-color: rgba(0, 0, 0, 0.5);
+      padding: 30px;
+      border-radius: 25px;
+      color: #fff;
+      font-size: 25px;
+      font-family: 'Noto Serif', serif;
+      font-family: 'ZCOOL KuaiLe', sans-serif;
+    }
+
+    #watermark {
+      position: absolute;
+      bottom: 132px;
+      left: 210px;
+      font-family: 'Noto Serif', serif;
+      font-family: 'ZCOOL KuaiLe', sans-serif;
+      font-size: 15px;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    @font-face {
+      font-family: 'myfont';
+      src: url('/static/font/myfont.ttf') format('truetype');
+    }
+  </style>
+
+
+</head>
+
+<body>
+  <video id="video-background" autoplay loop muted>
+    <!-- This background video is only for demonstration purpose -->
+    <source id="background_video" src="{{ background_video }}" type="video/mp4">
+  </video>
+
+  <div id="text-box">
+    <span id="titleArtist">Title - Artist</span>
+  </div>
+
+  <div id="timestamp-box">
+    <span id="timestamp">00:00 / 00:00</span>
+  </div>
+
+  <div class="watermark">
+    <span id="watermark">Watermark</span>
+  </div>
+
+  <script>
+    async function updateTextBox() {
+      const response = await fetch('/get_text');
+      const data = await response.json();
+      const titleArtistElement = document.getElementById('titleArtist');
+      titleArtistElement.textContent = data.title + ' - ' + data.artist;
+    }
+    async function updateBacgroundVideo() {
+      const response = await fetch('/get_background_video');
+      const data = await response.json();
+      const element = document.getElementById('background_video');
+      element.src = data.src;
+      element.load();
+    }
+
+
+    updateTextBox();
+    updateBacgroundVideo();
+    setInterval(updateTextBox, 300);
+    setInterval(updateBacgroundVideo, 500);
+  </script>
+  <script>
+    async function updateTimestampBox() {
+      const response = await fetch('/get_timestamp');
+      const data = await response.json();
+      const timestampElement = document.getElementById('timestamp');
+      timestampElement.textContent = data.timestamp;
+    }
+
+    updateTimestampBox();
+    setInterval(updateTimestampBox, 100); // Refresh
+  </script>
+
+  <script>
+    const videoElement = document.getElementById('video-background');
+    videoElement.playbackRate = 0.5; // Change the playback rate as desired
+  </script>
+</body>
+</html>
