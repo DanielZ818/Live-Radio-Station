@@ -14,7 +14,7 @@ Control Interface:
 
 To run:
 - Change host URL and port in wgsi.py
-- Run wgsi.py
+- Run wgsi.py (The printed URL is the URL for the webpage)
 - Add mp3 files into the track folder (or can be changed in music.py) (The format of filename each file should be "artist" - "title".mp3)
 - Run music.py
 
