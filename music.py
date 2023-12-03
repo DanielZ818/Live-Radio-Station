@@ -46,7 +46,10 @@ def main():
         song_list = [file for file in os.listdir(folder_path) if file.endswith(".mp3")]
 
         # Get all songs that had not played in the last 50 songs
-        unplayed_songs = [song for song in song_list if song not in history[-50:]]
+        # unplayed_songs = [song for song in song_list if song not in history[-50:]]
+        # Or without checking
+        unplayed_songs = [song for song in song_list]
+
 
         # If there are no unplayed song
         if not unplayed_songs:
